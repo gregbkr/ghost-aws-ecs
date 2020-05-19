@@ -1,0 +1,15 @@
+/*
+|-------------------------------------------------------------------------------
+| Page title
+|-------------------------------------------------------------------------------
+*/
+.c-page-title {
+  text-align: center;
+  margin-bottom: 40px;
+  padding: 10px 0 40px 0;
+  border-bottom: 1px solid $c-gray;
+}
+
+.c-page-title__heading__tag {
+  text-transform: lowercase;
+}

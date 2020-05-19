@@ -1,0 +1,84 @@
+/*
+|-------------------------------------------------------------------------------
+| Helpers / Overrides
+|-------------------------------------------------------------------------------
+*/
+.clear:after  {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+/*
+ | -----------------------------------------------------------------------------
+ | Markdown content style
+ | -----------------------------------------------------------------------------
+*/
+.markdown {
+  line-height: 2;
+
+  h1, h2, h3, p, ul,
+  blockquote, pre, .gist {
+    margin-bottom: 30px;
+    word-wrap: break-word;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  ul {
+    padding-left: 3em;
+  }
+
+  a {
+    text-decoration: underline;
+
+    &:hover {
+      text-decoration: none;
+
+      img {
+        opacity: 0.8;
+      }
+    }
+  }
+
+  img {
+    width: 100%;
+    @include transition();
+
+    &.inline {
+      width: auto;
+      display: inline-block;
+    }
+  }
+
+  blockquote {
+    padding-left: 30px;
+    font-style: italic;
+    border-left: 4px solid $c-gray;
+  }
+
+  hr {
+    border: 0;
+    height: 1px;
+    margin: 30px 0;
+    background: $c-gray;
+  }
+
+  pre {
+    padding: 1em;
+    overflow: auto;
+    font-size: 0.9em;
+    line-height: 1.5;
+    background: $c-background;
+  }
+
+  code {
+    background: $c-background;
+  }
+
+  .gist .gist-file {
+    margin-bottom: 0;
+  }
+}

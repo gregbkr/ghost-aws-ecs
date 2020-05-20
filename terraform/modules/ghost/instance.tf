@@ -62,21 +62,8 @@ resource "aws_security_group" "ec2" {
   description = "Security Group"
   vpc_id = data.aws_vpc.default.id
   ingress {
-    from_port = 22
-    to_port = 22
-    protocol = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  ingress {
     from_port = 80
     to_port = 80
-    protocol = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  # Session manager?
-  ingress {
-    from_port = 443
-    to_port = 443
     protocol = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -91,15 +78,15 @@ resource "aws_security_group" "ec2" {
 resource "aws_launch_template" "lt" {
   name_prefix   = "${var.tag}-"
   image_id      = var.ami
-  instance_type = "t2.micro"
-  key_name      = "aws-finstack-greg-user"
+  instance_type = "t2.nano"
+  key_name      = var.key_pair
   iam_instance_profile {
     name = aws_iam_instance_profile.profile.name
   }
   vpc_security_group_ids = ["${aws_security_group.ec2.id}"]
   user_data     = base64encode(<<EOF
     #!/bin/bash -xe
-    echo ECS_CLUSTER=blog-terra >> /etc/ecs/ecs.config
+    echo ECS_CLUSTER=${var.tag} >> /etc/ecs/ecs.config
   EOF
   )
   tag_specifications {
@@ -119,8 +106,8 @@ resource "aws_autoscaling_group" "asg" {
   max_size                  = 1
   min_size                  = 1
   desired_capacity          = 1
-  availability_zones        = ["eu-west-1a","eu-west-1b"]
-  vpc_zone_identifier       = ["subnet-8efea4e8", "subnet-4756311d"]
+  availability_zones        = ["eu-west-1a","eu-west-1b","eu-west-1c"]
+  vpc_zone_identifier       = var.subnets
   launch_template {
     id      = aws_launch_template.lt.id
     version = "$Latest"

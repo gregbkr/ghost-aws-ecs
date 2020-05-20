@@ -36,7 +36,6 @@ resource "aws_ecs_task_definition" "def" {
   }
 }
 
-
 resource "aws_ecs_cluster" "cluster" {
   name = var.tag
 }

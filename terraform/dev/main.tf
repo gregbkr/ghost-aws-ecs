@@ -18,13 +18,21 @@ terraform {
 module "ghost" {
   source = "../modules/ghost"
   tag = "blog-terra"
-  dns_name = "blog.mymicrosaving.com"
+  dns_record = "blog" # Leave empty for connecting to dns_domain directly
   dns_domain = "mymicrosaving.com"
+  cf_dns = "blog.mymicrosaving.com" # The full DNS path of the blog
   cert_arn = "arn:aws:acm:us-east-1:391378411314:certificate/be08f8a9-7c2e-404f-9fdb-159783313f57" # Your domain cert
   ami = "ami-0a490cbd46f8461a9" # Find the latest ami for amzn-ami-2018.03.20200430-amazon-ecs-optimized in your region
+  key_pair = "aws-finstack-greg-user"
   subnets = ["subnet-4756311d","subnet-8efea4e8","subnet-ca0e3b82"]
-  instance_dns = "ec2-54-229-227-154.eu-west-1.compute.amazonaws.com" # Get this var after a first deploy, when ECS is up, please replace then and terraform apply
+  instance_dns = "ec2-52-209-82-50.eu-west-1.compute.amazonaws.com" # Get this var after a first deploy, when ECS is up, please replace then and terraform apply
 }
+
+# module "healthcheck" {
+#   source = "../modules/healthcheck"
+#   tag = "blog-terra"
+#   instance_dns = "ec2-52-209-82-50.eu-west-1.compute.amazonaws.com" # Get this var after a first deploy, when ECS is up, please replace then and terraform apply
+# }
 
 # OUTPUTS
 output "domain_name" {
@@ -33,3 +41,4 @@ output "domain_name" {
 output "efs_dns" {
   value = module.ghost.efs_dns
 }
+

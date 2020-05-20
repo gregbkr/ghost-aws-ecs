@@ -28,31 +28,39 @@ User --> Route53 --> Cloudfront --> EC2 DNS (docker ghost on ECS) <-- EFS (blog 
 
 - Deploy with:
 ```
-cd terraform 
-nano main.tf <-- edit variables
-terraform init
+cd terraform/dev
+nano main.tf    <-- edit variables
+terraform init  
 terraform apply
 ```
+- If using terraform cloud: change workspace -> setting to "local" (to use our local aws credential)
 - First deploy should not work because the blog data are not in EFS.
 
 #### Fix the data
-- Connect to the EC2 instances, mount the EFS volume:
+- Delete the ECS service ghost
+- Connect to the EC2 instances, mount the EFS volume (check its DNS name in the console):
 ```
 sudo mkdir /mnt/efs
 sudo mount -t efs fs-9921c253.efs.eu-west-1.amazonaws.com /mnt/efs/
 ```
-- And copy the data from `blog-data` to `/mnt/efs/.`
+- And copy the data from a backup to `/mnt/efs/.` ex: `scp -r -i ~/.ssh/aws-greg-eu-west-1.pem ~/Documents/blog/blog-data  ec2-user@54.194.140.51:~/`
 
 #### Fix CloudFront -> EC2 (ECS) link
 - There are no LB because of cost (20$ per month). So if instance goes down, I have to update cloudfront origin with the EC2 instance public DNS.
-- Get the DNS of the ECS instance and replace the variable `instance_dns` in `terraform/main.tf`
+- Get the DNS of the ECS instance and replace the variable `instance_dns` in `terraform/dev/main.tf`
 - Run again a `terraform deploy`
-
 
 ### Check
 - Try the website on CloudFront url
 - Try with your DNS: d3vblog.com
 
+### Backup
+- Use [backup](https://eu-west-1.console.aws.amazon.com/backup) to backup every day your EFS data.
+
 ## Annexes
 - To run manually the container: `docker run -d -p 2368:2368 -e NODE_ENV=production --name ghost -v $PWD/ghost-backup:/var/lib/ghost ghost:0.11.3`
 - Check that blog data are present, and the rights are set
+
+# Todo
+- reserved instance: 
+- ping.com url - healtcheck

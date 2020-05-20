@@ -19,7 +19,7 @@
 User --> Route53 --> Cloudfront --> EC2 DNS (docker ghost on ECS) <-- EFS (blog data)
 
 ## Infra
-![Infra](./.github/images/myapp-eks-infra.png)
+![Infra](./.github/images/ghost-ecs-infra.png)
 
 ### Prerequisit
 - Purchase domain `d3vblog.com` in route53

@@ -4,6 +4,12 @@ provider "aws" {
   profile = "finstack"
 }
 
+provider "aws" {
+  alias  = "us-east-1"
+  region = "us-east-1"
+  profile = "finstack"
+}
+
 terraform {
   required_version = "~> 0.12.0"
   backend "remote" {  
@@ -15,9 +21,17 @@ terraform {
   }
 }
 
+variable "tag" {
+  default = "blog-terra"
+}
+variable "instance_dns" {
+  default = "ec2-3-249-228-52.eu-west-1.compute.amazonaws.com" # Get this var after a first deploy, when ECS is up, please replace then and terraform apply
+}
+
 module "ghost" {
   source = "../modules/ghost"
-  tag = "blog-terra"
+  # provider = "aws.eu-west-1"
+  tag = var.tag
   dns_record = "blog" # Leave empty for connecting to dns_domain directly
   dns_domain = "mymicrosaving.com"
   cf_dns = "blog.mymicrosaving.com" # The full DNS path of the blog
@@ -25,14 +39,18 @@ module "ghost" {
   ami = "ami-0a490cbd46f8461a9" # Find the latest ami for amzn-ami-2018.03.20200430-amazon-ecs-optimized in your region
   key_pair = "aws-finstack-greg-user"
   subnets = ["subnet-4756311d","subnet-8efea4e8","subnet-ca0e3b82"]
-  instance_dns = "ec2-52-209-82-50.eu-west-1.compute.amazonaws.com" # Get this var after a first deploy, when ECS is up, please replace then and terraform apply
+  instance_dns = var.instance_dns
 }
 
-# module "healthcheck" {
-#   source = "../modules/healthcheck"
-#   tag = "blog-terra"
-#   instance_dns = "ec2-52-209-82-50.eu-west-1.compute.amazonaws.com" # Get this var after a first deploy, when ECS is up, please replace then and terraform apply
-# }
+# Healthcheck metric only works in us-east-1
+module "healthcheck" { 
+  source = "../modules/healthcheck"
+  providers = {
+    aws = aws.us-east-1
+  }
+  tag = var.tag
+  instance_dns = var.instance_dns
+}
 
 # OUTPUTS
 output "domain_name" {

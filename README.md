@@ -3,7 +3,11 @@
 ## Overview
 
 ### Scope
-- I need to keep my old ghost blog running. My version of ghost is too old to be upgraded and I don't want to spend time re-develop a static site. I did not find any nice gatsby/hugo templates. I will use the smallest EC2 instance (2$/months), and ECS/ASG (free), and a cloudfront (cheap) to keep the site up. However, it is not 100% HA, need to link manually the DNS to cloudfront if the instance get destroyed. If so a healthcheck will alert me to relaunch the terraform plan with the new instance DNS.
+- I need to keep my old ghost blog running. 
+- My version of ghost is too old to be upgraded and I don't want to spend time re-develop a static site.
+- I did not find any nice gatsby/hugo templates.
+- I will use the smallest EC2 instance (2$/months), ECS/ASG (free), and a cloudfront (cheap) to keep the site up. 
+- However, it is not 100% HA, need to link manually the DNS to cloudfront if the instance get destroyed. If so a healthcheck will alert me to relaunch the terraform plan with the new instance DNS.
 
 ### Tech
 - Hosting: AWS cloud
@@ -51,11 +55,15 @@ sudo mount -t efs fs-9921c253.efs.eu-west-1.amazonaws.com /mnt/efs/
 - Run again a `terraform deploy`
 
 ### Check
-- Try the website on CloudFront url
+- Try the website on instance and CloudFront url
 - Try with your DNS: https://d3vblog.com
 
 ### Backup
 - Use [backup](https://eu-west-1.console.aws.amazon.com/backup) to backup every day your EFS data.
+
+### Setup SNS for delivering monitoring alert
+- Terraform will not let you create a subcription to SNS, so you are alerted when the blog goes down.
+- You have to go via the console to SNS, region `us-east-1`(!), create an EMAIL subscription, and validated the url in your mailbox.
 
 ### Lower the cost
 - Go the EC2/reserved instance and buy a linux `t2.nano` in the region your deployed the ECS cluster. Insted of paying 5$/month for a `t2.nano` your should be able to find some 2.2$ / month

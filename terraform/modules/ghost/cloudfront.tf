@@ -26,7 +26,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     domain_name = var.instance_dns
     origin_id   = local.s3_origin_id
     custom_origin_config {
-      http_port              = "80"
+      http_port              = "2368"
       https_port             = "443"
       origin_protocol_policy = "http-only"
       origin_ssl_protocols   = ["TLSv1", "TLSv1.1", "TLSv1.2"]
@@ -73,40 +73,4 @@ resource "aws_route53_record" "www" {
     zone_id                = aws_cloudfront_distribution.s3_distribution.hosted_zone_id
     evaluate_target_health = false
   }
-}
-
-# HEALTHCHECK
-# We will check instance DNS pourt 80 to see if VM/container did not go down
-resource "aws_route53_health_check" "check" {
-  fqdn              = var.instance_dns
-  port              = 80
-  type              = "HTTP"
-  resource_path     = "/"
-  failure_threshold = "3"
-  request_interval  = "30"
-  # regions           = ["${data.aws_region.current.name}"]
-  cloudwatch_alarm_name   = aws_cloudwatch_metric_alarm.alarm.alarm_name
-  cloudwatch_alarm_region = data.aws_region.current.name
-  tags = {
-    Name = var.tag
-  }
-}
-
-resource "aws_cloudwatch_metric_alarm" "alarm" {
-  alarm_name          = "${var.tag}-ecs-instance"
-  comparison_operator = "LessThanThreshold"
-  evaluation_periods  = "1"
-  metric_name         = "HealthCheckStatus"
-  namespace           = "AWS/Route53"
-  period              = "60"
-  datapoints_to_alarm = "1"
-  statistic           = "Minimum"
-  threshold           = "1"
-  alarm_description   = "This metric monitors ecs instance healthcheck"
-  actions_enabled     = "true"
-  alarm_actions       = [aws_sns_topic.sns.arn]
-}
-
-resource "aws_sns_topic" "sns" {
-  name = "${var.tag}-ecs-instance-dns-healthcheck-failed"
 }

@@ -15,7 +15,7 @@ resource "aws_ecs_task_definition" "def" {
       "portMappings": [
         {
           "containerPort": 2368,
-          "hostPort": 80
+          "hostPort": 2368
         }
       ],
       "mountPoints": [

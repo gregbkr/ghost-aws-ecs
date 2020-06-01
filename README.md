@@ -63,7 +63,7 @@ sudo mount -t efs fs-9921c253.efs.eu-west-1.amazonaws.com /mnt/efs/
 
 ### Setup SNS for delivering monitoring alert
 - Terraform will not let you create a subcription to SNS, so you are alerted when the blog goes down.
-- You have to go via the console to SNS, region `us-east-1`(!), create an EMAIL subscription, and validated the url in your mailbox.
+- You have to go via the console to SNS, region `us-east-1`(!), topics, create an EMAIL subscription, and validated the url in your mailbox.
 
 ### Lower the cost
 - Go the EC2/reserved instance and buy a linux `t2.nano` in the region your deployed the ECS cluster. Insted of paying 5$/month for a `t2.nano` your should be able to find some 2.2$ / month
@@ -80,6 +80,11 @@ Maintenance cost of this infra / month:
 ## Annexes
 - To run manually the container: `docker run -d -p 2368:2368 -e NODE_ENV=production --name ghost -v $PWD/ghost-backup:/var/lib/ghost ghost:0.11.3`
 - Check that blog data are present, and the rights are set
+- Manual backup to laptop
+```
+tar -czvf ghost.1.06.2020.tar.gz /mnt/efs/   # from server
+scp -i ~/.ssh/greg-eu-west-1.pem ec2-user@ip:~/ghost.1.06.2020.tar.gz ~/GBC/BACKUP/.  # From laptop
+```
 
 # Todo
 - Healtcheck alarm issue 

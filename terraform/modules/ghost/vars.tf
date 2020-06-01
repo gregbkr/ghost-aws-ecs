@@ -3,6 +3,9 @@
 variable "tag" {
   default = "blog-terra"
 }
+variable "env" {
+  default = "dev"
+}
 variable "dns_record" {
   default = "blog"
 }

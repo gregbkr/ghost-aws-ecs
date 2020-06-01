@@ -62,6 +62,12 @@ resource "aws_security_group" "ec2" {
   description = "Security Group"
   vpc_id = data.aws_vpc.default.id
   ingress {
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
     from_port = 2368
     to_port = 2368
     protocol = "tcp"
@@ -94,6 +100,7 @@ resource "aws_launch_template" "lt" {
 
     tags = {
       Name = "${var.tag}-ecs-instance-asg"
+      "Patch Group" = var.env
     }
   }
   lifecycle {

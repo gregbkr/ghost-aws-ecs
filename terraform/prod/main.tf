@@ -29,16 +29,17 @@ variable "instance_dns" {
 }
 
 module "ghost" {
-  source = "../modules/ghost"
-  tag = var.tag
-  dns_record = "" # Leave empty for connecting to dns_domain directly
-  dns_domain = "d3vblog.com"
-  cf_dns = "d3vblog.com" # The full DNS path of the blog
-  cert_arn = "arn:aws:acm:us-east-1:282835178041:certificate/5aaffe3b-aff7-42a7-8297-182926345bc0" # Your domain cert
-  ami = "ami-0a490cbd46f8461a9" # Find the latest ami for amzn-ami-2018.03.20200430-amazon-ecs-optimized in your region
-  key_pair = "greg-eu-west-1"
-  subnets = ["subnet-390a8063","subnet-8c430bea","subnet-c2ca928a"]
-  instance_dns = var.instance_dns
+  source        = "../modules/ghost"
+  tag           = var.tag
+  env           = "production"
+  dns_record    = "greg" # Leave empty for connecting to dns_domain directly
+  dns_domain    = "satoshi.tech"
+  cf_dns        = "greg.satoshi.tech" # The full DNS path of the blog
+  cert_arn      = "arn:aws:acm:us-east-1:282835178041:certificate/e34fadff-b0d8-47d4-978f-58bd41b6194a" # Your domain cert
+  ami           = "ami-0a74b180a0c97ecd1" # Find the latest ami for https://aws.amazon.com/marketplace/pp/Amazon-Web-Services-Amazon-ECS-Optimized-Amazon-Li/B07KMLLN73?stl=true > continue to subscribe > find ami-id
+  key_pair      = "greg-eu-west-1"
+  subnets       = ["subnet-390a8063","subnet-8c430bea","subnet-c2ca928a"]
+  instance_dns  = var.instance_dns
 }
 
 # Healthcheck metric only works in us-east-1

@@ -61,12 +61,12 @@ resource "aws_security_group" "ec2" {
   name = "${var.tag}-ec2"
   description = "Security Group"
   vpc_id = data.aws_vpc.default.id
-  ingress {
-    from_port = 22
-    to_port = 22
-    protocol = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+  # ingress {
+  #   from_port = 22
+  #   to_port = 22
+  #   protocol = "tcp"
+  #   cidr_blocks = ["0.0.0.0/0"]
+  # }
   ingress {
     from_port = 2368
     to_port = 2368
@@ -84,7 +84,7 @@ resource "aws_security_group" "ec2" {
 resource "aws_launch_template" "lt" {
   name_prefix   = "${var.tag}-"
   image_id      = var.ami
-  instance_type = "t2.nano"
+  instance_type = "t2.small"
   key_name      = var.key_pair
   iam_instance_profile {
     name = aws_iam_instance_profile.profile.name

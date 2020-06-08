@@ -25,7 +25,7 @@ variable "tag" {
   default = "ghost-blog-prod"
 }
 variable "instance_dns" {
-  default = "ec2-54-217-137-214.eu-west-1.compute.amazonaws.com" # Get this var after a first deploy, when ECS is up, please replace then and terraform apply
+  default = "ec2-3-249-172-172.eu-west-1.compute.amazonaws.com" # Get this var after a first deploy, when ECS is up, please replace then and terraform apply
 }
 
 module "ghost" {

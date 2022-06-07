@@ -10,8 +10,11 @@ output "hosted_zone_id" {
 output "default_vpc_id" {
   value = data.aws_vpc.default.id
 }
-output "default_subnet_ids" {
-  value = ["${data.aws_subnet_ids.default.ids}"]
+# output "default_subnet_ids" {
+#   value = ["${data.aws_subnet_ids.default.ids}"]
+# }
+output "default_subnets" {
+  value = ["${data.aws_subnets.default}"]
 }
 output "first-subnets" {
   value = var.subnets[0]

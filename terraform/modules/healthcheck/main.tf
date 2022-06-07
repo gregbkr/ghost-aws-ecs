@@ -1,6 +1,15 @@
 variable "tag" {}
 variable "instance_dns" {}
 
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      #version = ">= 2.7.0"
+    }
+  }
+}
+
 resource "aws_route53_health_check" "check" {
   fqdn              = var.instance_dns
   port              = 2368

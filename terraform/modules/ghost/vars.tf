@@ -20,10 +20,10 @@ variable "cert_arn" {
 }
 # Please find the latest ami for amzn-ami-2018.03.20200430-amazon-ecs-optimized in your region
 variable "ami" {
-  default = "ami-0a490cbd46f8461a9"
+  default = "ami-07a1802c113adc855"
 }
 variable "key_pair" {
-  default = "aws-finstack-greg-user"
+  default = "gregbk1@laptopasus"
 }
 # We will get this var after a first deploy, when ECS is up, please replace then
 variable "instance_dns" {

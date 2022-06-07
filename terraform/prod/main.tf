@@ -1,17 +1,17 @@
 provider "aws" {
-  version = "~> 2.62"
+  #version = "~> 2.62"
   region = "eu-west-1"
   profile = "gregbkr"
 }
 
 provider "aws" {
-  alias  = "us-east-1"
+  alias  = "healthcheck"
   region = "us-east-1"
   profile = "gregbkr"
 }
 
 terraform {
-  required_version = "~> 0.12.0"
+  required_version = "~> 1.2.1"
   backend "remote" {  
     hostname = "app.terraform.io"
     organization = "gregbkr"
@@ -25,7 +25,7 @@ variable "tag" {
   default = "ghost-blog-prod"
 }
 variable "instance_dns" {
-  default = "ec2-3-249-172-172.eu-west-1.compute.amazonaws.com" # Get this var after a first deploy, when ECS is up, please replace then and terraform apply
+  default = "ec2-54-216-241-241.eu-west-1.compute.amazonaws.com" # Get this var after a first deploy, when ECS is up, please replace then and terraform apply
 }
 
 module "ghost" {
@@ -36,8 +36,8 @@ module "ghost" {
   dns_domain    = "satoshi.tech"
   cf_dns        = "greg.satoshi.tech" # The full DNS path of the blog
   cert_arn      = "arn:aws:acm:us-east-1:282835178041:certificate/e34fadff-b0d8-47d4-978f-58bd41b6194a" # Your domain cert
-  ami           = "ami-0a74b180a0c97ecd1" # Find the latest ami for https://aws.amazon.com/marketplace/pp/Amazon-Web-Services-Amazon-ECS-Optimized-Amazon-Li/B07KMLLN73?stl=true > continue to subscribe > find ami-id
-  key_pair      = "greg-eu-west-1"
+  ami           = "ami-07a1802c113adc855" # Find the latest ami for https://aws.amazon.com/marketplace/pp/Amazon-Web-Services-Amazon-ECS-Optimized-Amazon-Li/B07KMLLN73?stl=true > continue to subscribe > find ami-id
+  key_pair      = "gregbk1@laptopasus"
   subnets       = ["subnet-390a8063","subnet-8c430bea","subnet-c2ca928a"]
   instance_dns  = var.instance_dns
 }
@@ -46,7 +46,7 @@ module "ghost" {
 module "healthcheck" { 
   source = "../modules/healthcheck"
   providers = {
-    aws = aws.us-east-1
+    aws = aws.healthcheck
   }
   tag = var.tag
   instance_dns = var.instance_dns

@@ -52,7 +52,7 @@ sudo mount -t efs fs-9921c253.efs.eu-west-1.amazonaws.com /mnt/efs/
 #### Fix CloudFront -> EC2 (ECS) link
 - There are no LB because of cost (20$ per month). So if instance goes down, I have to update cloudfront origin with the EC2 instance public DNS.
 - Get the DNS of the ECS instance and replace the variable `instance_dns` in `terraform/dev/main.tf`
-- Run again a `terraform deploy`
+- Run again a `terraform apply`
 
 ### Check
 - Try the website on instance and CloudFront url
@@ -85,6 +85,8 @@ Maintenance cost of this infra / month:
 tar -czvf ghost.1.06.2020.tar.gz /mnt/efs/   # from server
 scp -i ~/.ssh/greg-eu-west-1.pem ec2-user@ip:~/ghost.1.06.2020.tar.gz ~/GBC/BACKUP/.  # From laptop
 ```
+
+- Ami: amzn2-ami-ecs-hvm-2.0.20200430-x86_64-ebs -> New ami-07a1802c113adc855 
 
 # Todo
 - Healtcheck alarm issue 

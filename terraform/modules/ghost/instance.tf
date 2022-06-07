@@ -114,7 +114,7 @@ resource "aws_autoscaling_group" "asg" {
   min_size                  = 1
   desired_capacity          = 1
   availability_zones        = ["eu-west-1a","eu-west-1b","eu-west-1c"]
-  vpc_zone_identifier       = var.subnets
+  #vpc_zone_identifier       = var.subnets
   launch_template {
     id      = aws_launch_template.lt.id
     version = "$Latest"
